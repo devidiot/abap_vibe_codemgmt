@@ -1,0 +1,18 @@
+managed implementation in class zbp_i_vibe_code unique;
+strict ( 2 );
+
+define behavior for ZI_VIBE_CODE alias Code
+persistent table zt_vibe_code
+lock dependent by _CodeGroup
+etc
+{
+  update;
+  delete;
+
+  field ( mandatory ) CodeGroupID, CodeID;
+  field ( readonly )  CreatedBy, CreatedAt, UpdatedBy, UpdatedAt;
+
+  validation validateCodeValue on save { create; update; }
+
+  association _CodeGroup;
+}

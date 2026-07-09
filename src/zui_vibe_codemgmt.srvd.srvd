@@ -1,0 +1,5 @@
+@EndUserText.label: 'Vibe Code Management'
+define service ZUI_VIBE_CODEMGMT {
+  expose ZI_VIBE_CODEGROUP as CodeGroup;
+  expose ZI_VIBE_CODE as Code;
+}

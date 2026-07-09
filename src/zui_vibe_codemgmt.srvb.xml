@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SRVB" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <SRVB>
+    <BINDING_TYPE>ODATA</BINDING_TYPE>
+    <BINDING_CATEGORY>0</BINDING_CATEGORY>
+    <VERSION>0004</VERSION>
+    <DESCRIPTN>Vibe Code Management</DESCRIPTN>
+   </SRVB>
+   <SRVB_SERVICE_DEFINITIONS>
+    <SRVB_SERVICE_DEFINITION>
+     <SERVICE_DEFINITION_NAME>ZUI_VIBE_CODEMGMT</SERVICE_DEFINITION_NAME>
+    </SRVB_SERVICE_DEFINITION>
+   </SRVB_SERVICE_DEFINITIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

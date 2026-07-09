@@ -15,4 +15,18 @@ etc
   validation validateCodeValue on save { create; update; }
 
   association _CodeGroup;
+
+  mapping for zt_vibe_code
+  {
+    CodeGroupID = code_group_id;
+    CodeID      = code_id;
+    CodeValue   = code_value;
+    Description = description;
+    IsActive    = is_active;
+    SortOrder   = sort_order;
+    CreatedBy   = created_by;
+    CreatedAt   = created_at;
+    UpdatedBy   = updated_by;
+    UpdatedAt   = updated_at;
+  }
 }

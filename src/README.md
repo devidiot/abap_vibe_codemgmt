@@ -2,19 +2,22 @@
 
 이 폴더는 abapGit이 SAP 시스템으로 pull하는 실제 소스 폴더다. `.abapgit.xml`(리포지토리 루트)이 이 폴더를 `STARTING_FOLDER`로 지정하고 있으므로, **모든 오브젝트 파일은 하위 폴더 없이 이 폴더 바로 아래에 평평하게(flat) 있어야 한다.** abapGit은 하위 폴더를 발견하면 그 이름을 서브패키지로 해석하므로, 임의로 폴더를 만들어 분류하면 pull이 깨진다.
 
-## 포함 오브젝트
-- `zt_vibe_codegroup.tabl.xml`, `zt_vibe_code.tabl.xml`: DDIC 테이블 (TABL, XML 메타데이터 직렬화)
-- `zi_vibe_codegroup.ddls.asddls`, `zi_vibe_code.ddls.asddls`: CDS 뷰 (DDLS, 텍스트 소스)
-- `zi_vibe_codegroup.bdef.asbdef`, `zi_vibe_code.bdef.asbdef`: Behavior Definition (텍스트 소스)
-- `zbp_i_vibe_codegroup.clas.abap` + `.clas.xml`, `zbp_i_vibe_code.clas.abap` + `.clas.xml`: Behavior 구현 클래스 (소스 + 클래스 속성 메타데이터 쌍)
-- `zui_vibe_codemgmt.srvd.srvd`: Service Definition (텍스트 소스)
-- `zui_vibe_codemgmt.srvb.xml`: Service Binding (XML 메타데이터 직렬화)
+## 포함 오브젝트 (오브젝트당 소스 + 메타데이터 XML 쌍)
+- `zt_vibe_codegroup.tabl.xml`, `zt_vibe_code.tabl.xml`: DDIC 테이블 (TABL). 순수 XML 메타데이터 직렬화, 텍스트 소스 없음.
+- `zi_vibe_codegroup.ddls.asddls` + `.ddls.xml`, `zi_vibe_code.ddls.asddls` + `.ddls.xml`: CDS 뷰 (DDLS). 텍스트 소스 + 메타데이터(설명, SOURCE_TYPE) 쌍.
+- `zi_vibe_codegroup.bdef.asbdef` + `.bdef.xml`, `zi_vibe_code.bdef.asbdef` + `.bdef.xml`: Behavior Definition. 텍스트 소스 + 메타데이터 쌍.
+- `zbp_i_vibe_codegroup.clas.abap` + `.clas.xml`, `zbp_i_vibe_code.clas.abap` + `.clas.xml`: Behavior 구현 클래스. 소스 + 클래스 속성(CATEGORY=06 Behavior Pool 등) 쌍.
+- `zui_vibe_codemgmt.srvd.srvdsrv` + `.srvd.xml`: Service Definition. 텍스트 소스 + 메타데이터 쌍. (확장자가 `.srvd.srvd`가 아니라 `.srvd.srvdsrv`인 점 주의)
+- `zui_vibe_codemgmt.srvb.xml`: Service Binding. 순수 XML 메타데이터, 텍스트 소스 없음.
 
-## 신뢰도 주의 (중요)
-`.tabl.xml`, `.clas.xml`, `.srvb.xml`은 텍스트 DDL이 아니라 SAP 내부 DDIC 구조(DD02V/DD09L/DD03P, VSEOCLASS, SRVB)를 그대로 XML로 옮긴 것이라, 실제 abapGit 직렬화 스키마와 완전히 동일한지 로컬에서 검증할 방법이 없다(라이브 SAP 시스템에 대한 실행 도구가 없음). 특히 **`zui_vibe_codemgmt.srvb.xml`이 가장 확신도가 낮다** — pull 시 이 오브젝트만 오류가 나면, 나머지(테이블/CDS/Behavior/Service Definition)를 먼저 활성화한 뒤 Service Binding만 ADT에서 수동으로 새로 만들어도 된다(마법사 몇 번 클릭이면 끝나는 간단한 작업).
+## 신뢰도 근거
+2026-07-09에 아래 실제 GitHub 리포지토리를 웹에서 직접 조회해 스키마를 대조했다:
+- `SAP-samples/abap-platform-rap110`, `SAP-samples/abap-platform-rap630` (SAP 공식 튜토리얼 샘플)
+- `Xexer/abap_rap_blog` (커뮤니티 RAP 예제)
 
-## pull 순서 / 의존관계
-abapGit은 기본적으로 오브젝트 간 의존관계(테이블→CDS→Behavior→Service)를 자동으로 파악해서 순서대로 처리한다. 만약 activation 오류가 나면 어떤 오브젝트에서 어떤 메시지가 났는지 그대로 알려주면 바로 원인 분석이 가능하다.
+이 과정에서 처음 작성했던 버전의 실수를 다수 발견해 수정했다: 테이블은 `POSITION` 필드가 아니라 `INTTYPE`/`INTLEN`/`MASK` 방식이었고, 관리 컬럼은 `SYUNAME`/직접 `UTCLONG`이 아니라 SAP 표준 RAP 데이터 엘리먼트(`ABP_CREATION_USER`, `ABP_CREATION_TSTMPL`, `ABP_LASTCHANGE_USER`, `ABP_LASTCHANGE_TSTMPL`)를 참조해야 했다. CDS/Behavior Definition/Service Definition은 텍스트 소스 외에 **별도 `.xml` 메타데이터 파일이 반드시 필요**했고(처음엔 없어도 되는 줄 알았다), Service Definition의 실제 확장자는 `.srvd.srvdsrv`였다(`.srvd.srvd` 아님). Service Binding XML도 훨씬 복잡한 `METADATA`/`CONTENT`/`SERVICES` 중첩 구조였다.
+
+그럼에도 실제 pull로 끝까지 검증한 적은 없으므로, **`zui_vibe_codemgmt.srvb.xml`(가장 복잡한 구조)이 상대적으로 가장 신뢰도가 낮다.** pull 시 이 오브젝트만 오류가 나면, 나머지(테이블/CDS/Behavior/Service Definition)는 이미 반영됐을 것이므로 Service Binding만 ADT에서 수동으로 새로 만들어도 된다(마법사 몇 번 클릭이면 끝).
 
 ## 사용 방법
 1. 이 리포지토리를 GitHub에 push한다 (사용자가 직접 수행).

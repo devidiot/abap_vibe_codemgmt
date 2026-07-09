@@ -5,7 +5,7 @@ S/4HANA RAP(ABAP RESTful Application Programming Model) 기반으로 "CodeGroup 
 ## 이 저장소로 할 수 없는 것
 - 로컬 빌드/테스트/린트 실행 (ABAP은 SAP 시스템 안에서만 컴파일된다)
 - Syntax check, activation, abapGit deserialization 여부 확인 — 반드시 실제 시스템에서 pull/activate해봐야 확인된다
-- 이 저장소에 있는 코드/XML이 "실행됨"을 검증한 적은 없다. 특히 `.tabl.xml`, `.clas.xml`, `.srvb.xml`은 텍스트 DDL이 아니라 SAP 내부 구조를 그대로 옮긴 XML이라 로컬에서 스키마를 검증할 방법이 없다. 문법/스키마는 알려진 abapGit 관례에 따라 작성했지만, 최종 확인은 실제 pull + activation이 유일한 근거다. pull 시 오류가 나면 오브젝트명과 메시지를 그대로 공유하면 바로 수정 가능하다.
+- 이 저장소에 있는 코드/XML이 "실행됨"을 검증한 적은 없다. XML 계열 파일(`.tabl.xml`, `.clas.xml`, `.ddls.xml`, `.bdef.xml`, `.srvd.xml`, `.srvb.xml`)은 GitHub의 실제 abapGit 리포지토리(SAP 공식 샘플 `SAP-samples/abap-platform-rap110`, `SAP-samples/abap-platform-rap630`, 커뮤니티 `Xexer/abap_rap_blog` 등)에서 확인된 스키마를 그대로 따라 작성했다(2026-07-09 웹에서 직접 대조). 다만 필드명이 100% 우리 오브젝트와 일치하는 걸 실제 pull로 확인한 적은 없으므로, pull 시 오류가 나면 오브젝트명과 메시지를 그대로 공유하면 바로 수정 가능하다.
 
 ## 핵심 명명 규칙
 - 패키지: `ZRYAN_VIBE`
@@ -32,8 +32,10 @@ S/4HANA RAP(ABAP RESTful Application Programming Model) 기반으로 "CodeGroup 
 ## 알려진 한계 (운영 반영 전 반드시 보완)
 - `@AccessControl.authorizationCheck: #NOT_REQUIRED`로 권한 체크를 생략한 상태다. 실제 권한 객체(DCL)를 설계하고 Behavior Definition에 `authorization` 절을 추가해야 한다.
 - Validation 메시지가 표준 SY 메시지 클래스(`id = '00'`)를 임시로 사용 중이다. 전용 메시지 클래스(예: `ZVIBE_CODEMGMT`)로 교체해야 한다.
-- `src/zui_vibe_codemgmt.srvb.xml`은 abapGit의 SRVB 직렬화 스키마를 추정해서 작성한 것이라 신뢰도가 가장 낮다. pull 시 이 오브젝트만 오류가 나면, 나머지를 먼저 활성화한 뒤 Service Binding만 ADT에서 수동으로 새로 생성해도 된다.
+- `src/zui_vibe_codemgmt.srvb.xml`(Service Binding)이 XML 계열 중 가장 복잡한 구조(METADATA/CONTENT/SERVICES 중첩)라 상대적으로 신뢰도가 낮다. pull 시 이 오브젝트만 오류가 나면, 나머지를 먼저 활성화한 뒤 Service Binding만 ADT에서 수동으로 새로 생성해도 된다.
+- `.ddls.baseinfo` 파일(ADT가 CDS 소스 분석 결과를 캐싱하는 JSON)은 의도적으로 포함하지 않았다 — 실제 리포지토리들에 존재하긴 하지만 ADT가 로컬에서 재생성하는 캐시성 파일로 보여서, 없어도 pull/activation 자체는 되는 것으로 판단했다. 만약 CDS 오브젝트에서만 이상 동작이 있으면 이 파일 누락을 의심할 것.
 - 패키지 `ZRYAN_VIBE`는 한때 "구조 패키지"로 설정되어 있어 개발 오브젝트 생성이 막혔던 이력이 있다(2026-07-09, `Structure packages cannot contain development objects`, PAK149). 현재는 개발 패키지로 변경 완료된 상태로 전달받았다.
+- 최초 `.abapgit.xml`을 오브젝트 직렬화 파일과 같은 `<abapGit><asx:abap>...` 이중 래퍼로 잘못 작성해서 `CX_XSLT_FORMAT_ERROR`가 발생했었다(2026-07-09). 리포지토리 루트 디스크립터는 `<asx:abap>`가 바로 루트여야 한다 — 오브젝트 파일들과 형식이 다르다는 점에 유의.
 
 ## 이 저장소에서 작업할 때
 - 문서(`docs/`)와 소스(`src/`)의 내용이 어긋나면 안 된다. 한쪽을 고치면 반드시 다른 쪽도 확인한다.

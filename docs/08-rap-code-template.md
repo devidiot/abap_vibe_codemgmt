@@ -76,6 +76,18 @@ etc
   validation validateCodeGroupName on save { create; update; }
 
   association _Code { create; }
+
+  mapping for zt_vibe_codegroup
+  {
+    CodeGroupID   = code_group_id;
+    CodeGroupName = code_group_name;
+    Description   = description;
+    IsActive      = is_active;
+    CreatedBy     = created_by;
+    CreatedAt     = created_at;
+    UpdatedBy     = updated_by;
+    UpdatedAt     = updated_at;
+  }
 }
 ```
 
@@ -98,6 +110,20 @@ etc
   validation validateCodeValue on save { create; update; }
 
   association _CodeGroup;
+
+  mapping for zt_vibe_code
+  {
+    CodeGroupID = code_group_id;
+    CodeID      = code_id;
+    CodeValue   = code_value;
+    Description = description;
+    IsActive    = is_active;
+    SortOrder   = sort_order;
+    CreatedBy   = created_by;
+    CreatedAt   = created_at;
+    UpdatedBy   = updated_by;
+    UpdatedAt   = updated_at;
+  }
 }
 ```
 

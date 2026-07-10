@@ -42,6 +42,8 @@ S/4HANA RAP(ABAP RESTful Application Programming Model) 기반으로 "CodeGroup 
   
   새 테이블을 추가할 때는 **16자 제한** + **Z 다음 2~3번째 자리에 언더스코어 금지**를 항상 먼저 확인할 것.
 - ADT에는 테이블도 CDS처럼 텍스트 소스로 정의하는 방식이 있다는 것도 확인됨: `define table` DDL 문법(`@AbapCatalog.tableCategory` 등 주석 + `abap.clnt`/`abap.char(N)`/`abap.utclong` 같은 built-in 타입)으로 New Database Table의 source view에 그대로 붙여넣을 수 있다(3rd-party ADT 도구 `fr0ster/mcp-abap-adt`의 테스트 픽스처에서 동일 패턴이 10회 이상 반복 검증됨). abapGit이 막힐 때 수동 생성 대안으로 유효하다 — 이 경우 반드시 필드명(`mandt`, `code_group_id` 등)을 `src/*.tabl.xml`과 동일하게 맞춰서 이후 abapGit 재pull 시 충돌이 나지 않게 한다.
+- **[해결됨] Behavior Definition에 존재하지 않는 `etc` 키워드를 잘못 넣었었다**(2026-07-10). `"( | authorization | changedocuments | draft | early | etag | ..." was expected, not "etc"` 활성화 오류로 발견 — 실제 RAP 문법에는 `etc`라는 헤더 종료 키워드가 없다(이 세션에서 앞서 대조했던 SAP 공식 샘플에도 없었는데 반영이 안 됐던 실수). `persistent table ...` / `lock ...` 절 다음 바로 `{`로 넘어가야 한다. `src/zi_vibe_codegroup.bdef.asbdef`, `src/zi_vibe_code.bdef.asbdef`, `docs/08-rap-code-template.md`에서 제거 완료.
+- CDS 활성화 오류에 `"data source 'zt_vibe_cdgroup' does not exist"`처럼 **옛 테이블명(언더스코어 버전)이 나온다면, 시스템에 이미 pull된 CDS 소스가 최신 리포지토리 상태(`zvibe_cdgroup`/`zvibe_code`, 언더스코어 없는 최종명)를 반영하기 전 버전**이라는 뜻이다. GitHub에 최신 상태를 다시 push하고 abapGit을 재pull해야 CDS의 `as select from` 참조가 갱신된다.
 
 ## 이 저장소에서 작업할 때
 - 문서(`docs/`)와 소스(`src/`)의 내용이 어긋나면 안 된다. 한쪽을 고치면 반드시 다른 쪽도 확인한다.

@@ -7,7 +7,7 @@
 - OData 엔티티/서비스 이름: ZVIBE_CODEMGMT
 
 ## 권장 객체 이름
-- 테이블: ZT_VIBE_CODEGROUP
+- 테이블: ZT_VIBE_CDGROUP
 - 테이블: ZT_VIBE_CODE
 - CDS Root Entity: ZI_VIBE_CODEGROUP
 - CDS Child Entity: ZI_VIBE_CODE

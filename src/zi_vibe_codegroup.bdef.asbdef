@@ -2,7 +2,7 @@ managed implementation in class zbp_i_vibe_codegroup unique;
 strict ( 2 );
 
 define behavior for ZI_VIBE_CODEGROUP alias CodeGroup
-persistent table zt_vibe_codegroup
+persistent table zt_vibe_cdgroup
 lock master
 etc
 {
@@ -17,7 +17,7 @@ etc
 
   association _Code { create; }
 
-  mapping for zt_vibe_codegroup
+  mapping for zt_vibe_cdgroup
   {
     CodeGroupID   = code_group_id;
     CodeGroupName = code_group_name;

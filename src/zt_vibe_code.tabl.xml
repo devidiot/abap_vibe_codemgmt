@@ -9,7 +9,7 @@
     <CLIDEP>X</CLIDEP>
     <DDTEXT>Code master data under CodeGroup</DDTEXT>
     <MASTERLANG>E</MASTERLANG>
-    <MAINFLAG>N</MAINFLAG>
+    <MAINFLAG>X</MAINFLAG>
     <CONTFLAG>A</CONTFLAG>
     <EXCLASS>4</EXCLASS>
    </DD02V>
@@ -115,6 +115,12 @@
      <COMPTYPE>E</COMPTYPE>
     </DD03P>
    </DD03P_TABLE>
+   <TABL_EXTRAS>
+    <TDDAT>
+     <TABNAME>ZT_VIBE_CODE</TABNAME>
+     <CCLASS>&amp;NC&amp;</CCLASS>
+    </TDDAT>
+   </TABL_EXTRAS>
   </asx:values>
  </asx:abap>
 </abapGit>

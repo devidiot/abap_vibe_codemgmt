@@ -7,7 +7,7 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Vibe Code Group'
 define root view entity ZI_VIBE_CODEGROUP
-  as select from zt_vibe_codegroup as CodeGroup
+  as select from zt_vibe_cdgroup as CodeGroup
   composition [0..*] of ZI_VIBE_CODE as _Code
 {
   key CodeGroup.code_group_id as CodeGroupID,
@@ -62,7 +62,7 @@ managed implementation in class zbp_i_vibe_codegroup unique;
 strict ( 2 );
 
 define behavior for ZI_VIBE_CODEGROUP alias CodeGroup
-persistent table zt_vibe_codegroup
+persistent table zt_vibe_cdgroup
 lock master
 etc
 {
@@ -77,7 +77,7 @@ etc
 
   association _Code { create; }
 
-  mapping for zt_vibe_codegroup
+  mapping for zt_vibe_cdgroup
   {
     CodeGroupID   = code_group_id;
     CodeGroupName = code_group_name;

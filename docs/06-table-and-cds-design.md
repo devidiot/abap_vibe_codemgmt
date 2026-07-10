@@ -8,7 +8,7 @@
 
 ## 2. 테이블 설계안
 ### 2.1 코드 그룹 테이블
-테이블명: ZT_VIBE_CODEGROUP
+테이블명: ZT_VIBE_CDGROUP
 
 필드:
 - mandt: 클라이언트

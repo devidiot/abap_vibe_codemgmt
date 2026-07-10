@@ -3,7 +3,7 @@
 이 폴더는 abapGit이 SAP 시스템으로 pull하는 실제 소스 폴더다. `.abapgit.xml`(리포지토리 루트)이 이 폴더를 `STARTING_FOLDER`로 지정하고 있으므로, **모든 오브젝트 파일은 하위 폴더 없이 이 폴더 바로 아래에 평평하게(flat) 있어야 한다.** abapGit은 하위 폴더를 발견하면 그 이름을 서브패키지로 해석하므로, 임의로 폴더를 만들어 분류하면 pull이 깨진다.
 
 ## 포함 오브젝트 (오브젝트당 소스 + 메타데이터 XML 쌍)
-- `zt_vibe_codegroup.tabl.xml`, `zt_vibe_code.tabl.xml`: DDIC 테이블 (TABL). 순수 XML 메타데이터 직렬화, 텍스트 소스 없음.
+- `zt_vibe_cdgroup.tabl.xml`, `zt_vibe_code.tabl.xml`: DDIC 테이블 (TABL). 순수 XML 메타데이터 직렬화, 텍스트 소스 없음.
 - `zi_vibe_codegroup.ddls.asddls` + `.ddls.xml`, `zi_vibe_code.ddls.asddls` + `.ddls.xml`: CDS 뷰 (DDLS). 텍스트 소스 + 메타데이터(설명, SOURCE_TYPE) 쌍.
 - `zi_vibe_codegroup.bdef.asbdef` + `.bdef.xml`, `zi_vibe_code.bdef.asbdef` + `.bdef.xml`: Behavior Definition. 텍스트 소스 + 메타데이터 쌍.
 - `zbp_i_vibe_codegroup.clas.abap` + `.clas.xml`, `zbp_i_vibe_code.clas.abap` + `.clas.xml`: Behavior 구현 클래스. 소스 + 클래스 속성(CATEGORY=06 Behavior Pool 등) 쌍.

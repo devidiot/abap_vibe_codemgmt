@@ -52,7 +52,7 @@ Code는 특정 CodeGroup 아래의 코드 값입니다.
 - 비활성 코드는 조회 우선순위에서 제외할 수 있다.
 
 ## 5. 권장 테이블명 예시
-- ZT_VIBE_CODEGROUP
+- ZT_VIBE_CDGROUP
 - ZT_VIBE_CODE
 
 ## 6. 구현 이름 기준

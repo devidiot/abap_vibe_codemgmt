@@ -10,7 +10,7 @@ S/4HANA RAP(ABAP RESTful Application Programming Model) 기반으로 "CodeGroup 
 ## 핵심 명명 규칙
 - 패키지: `ZRYAN_VIBE`
 - OData 엔티티/서비스 이름: `ZVIBE_CODEMGMT`
-- 테이블: `ZT_VIBE_CODEGROUP`, `ZT_VIBE_CODE` (접두사 `ZT_`)
+- 테이블: `ZT_VIBE_CDGROUP`, `ZT_VIBE_CODE` (접두사 `ZT_`)
 - CDS 뷰: `ZI_VIBE_CODEGROUP`(root), `ZI_VIBE_CODE`(child) (접두사 `ZI_`)
 - Behavior Definition: CDS 뷰와 동일한 이름 (`ZI_VIBE_CODEGROUP`, `ZI_VIBE_CODE`)
 - Behavior 구현 클래스: `ZBP_I_VIBE_CODEGROUP`, `ZBP_I_VIBE_CODE` (접두사 `ZBP_I_`)
@@ -36,6 +36,8 @@ S/4HANA RAP(ABAP RESTful Application Programming Model) 기반으로 "CodeGroup 
 - `.ddls.baseinfo` 파일(ADT가 CDS 소스 분석 결과를 캐싱하는 JSON)은 의도적으로 포함하지 않았다 — 실제 리포지토리들에 존재하긴 하지만 ADT가 로컬에서 재생성하는 캐시성 파일로 보여서, 없어도 pull/activation 자체는 되는 것으로 판단했다. 만약 CDS 오브젝트에서만 이상 동작이 있으면 이 파일 누락을 의심할 것.
 - 패키지 `ZRYAN_VIBE`는 한때 "구조 패키지"로 설정되어 있어 개발 오브젝트 생성이 막혔던 이력이 있다(2026-07-09, `Structure packages cannot contain development objects`, PAK149). 현재는 개발 패키지로 변경 완료된 상태로 전달받았다.
 - 최초 `.abapgit.xml`을 오브젝트 직렬화 파일과 같은 `<abapGit><asx:abap>...` 이중 래퍼로 잘못 작성해서 `CX_XSLT_FORMAT_ERROR`가 발생했었다(2026-07-09). 리포지토리 루트 디스크립터는 `<asx:abap>`가 바로 루트여야 한다 — 오브젝트 파일들과 형식이 다르다는 점에 유의.
+- **[해결됨] 테이블 생성 실패의 진짜 원인**: abapGit pull 시 CDS/Behavior/Service는 생성됐는데 CodeGroup 테이블만 오류 없이 조용히 생성되지 않았다(2026-07-10). ADT에서 수동 생성을 시도했을 때 `"17 characters exceed the maximum of 16 characters in field 'Name'"` 오류로 원인이 드러났다 — 원래 테이블명 `ZT_VIBE_CODEGROUP`이 17자였다. **클래식 ABAP Dictionary 테이블명은 16자 제한**이다(CDS 뷰/클래스/서비스 이름은 30자까지 가능한 것과 다르다). 그래서 CDS 엔티티 이름(`ZI_VIBE_CODEGROUP` 등)은 그대로 두고, 물리 테이블명만 `ZT_VIBE_CDGROUP`(15자)로 줄였다 — CDS `as select from`, Behavior Definition의 `persistent table`/`mapping for` 절도 함께 갱신했다. 새 테이블/엔티티를 추가할 때는 **테이블명은 16자 제한**이라는 점을 항상 먼저 확인할 것.
+- ADT에는 테이블도 CDS처럼 텍스트 소스로 정의하는 방식이 있다는 것도 확인됨: `define table` DDL 문법(`@AbapCatalog.tableCategory` 등 주석 + `abap.clnt`/`abap.char(N)`/`abap.utclong` 같은 built-in 타입)으로 New Database Table의 source view에 그대로 붙여넣을 수 있다(3rd-party ADT 도구 `fr0ster/mcp-abap-adt`의 테스트 픽스처에서 동일 패턴이 10회 이상 반복 검증됨). abapGit이 막힐 때 수동 생성 대안으로 유효하다 — 이 경우 반드시 필드명(`mandt`, `code_group_id` 등)을 `src/*.tabl.xml`과 동일하게 맞춰서 이후 abapGit 재pull 시 충돌이 나지 않게 한다.
 
 ## 이 저장소에서 작업할 때
 - 문서(`docs/`)와 소스(`src/`)의 내용이 어긋나면 안 된다. 한쪽을 고치면 반드시 다른 쪽도 확인한다.

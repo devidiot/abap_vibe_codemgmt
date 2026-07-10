@@ -29,3 +29,34 @@ authorization master ( instance )
     UpdatedAt     = updated_at;
   }
 }
+
+define behavior for ZI_VIBE_CODE alias Code
+implementation in class zbp_i_vibe_code unique
+persistent table zvibe_code
+lock dependent by _CodeGroup
+authorization dependent by _CodeGroup
+{
+  update;
+  delete;
+
+  field ( mandatory ) CodeGroupID, CodeID;
+  field ( readonly )  CreatedBy, CreatedAt, UpdatedBy, UpdatedAt;
+
+  validation validateCodeValue on save { create; update; }
+
+  association _CodeGroup;
+
+  mapping for zvibe_code
+  {
+    CodeGroupID = code_group_id;
+    CodeID      = code_id;
+    CodeValue   = code_value;
+    Description = description;
+    IsActive    = is_active;
+    SortOrder   = sort_order;
+    CreatedBy   = created_by;
+    CreatedAt   = created_at;
+    UpdatedBy   = updated_by;
+    UpdatedAt   = updated_at;
+  }
+}

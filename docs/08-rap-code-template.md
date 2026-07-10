@@ -56,7 +56,9 @@ define view entity ZI_VIBE_CODE
 ```
 
 ## 3. Behavior Definition 예시
-### 3.1 Root (CodeGroup)
+
+> **중요**: RAP에서는 composition 관계에 있는 root와 child의 Behavior Definition이 **하나의 BDEF 오브젝트(파일)** 안에 함께 정의된다. Child를 별도의 독립 BDEF 오브젝트로 만들면 "not a root entity" 오류가 난다. BDEF 오브젝트/파일명은 root 엔티티 이름(`zi_vibe_codegroup.bdef.asbdef`)을 따르고, 그 안에 root의 `define behavior for ...` 블록 다음에 child의 `define behavior for ...` 블록을 이어서 작성한다. Child 블록은 `managed` 키워드 없이 `implementation in class <구현클래스> unique`로 시작한다(`managed`는 파일 최상단에서 한 번만 선언).
+
 ```abap
 managed implementation in class zbp_i_vibe_codegroup unique;
 strict ( 2 );
@@ -89,14 +91,9 @@ authorization master ( instance )
     UpdatedAt     = updated_at;
   }
 }
-```
-
-### 3.2 Child (Code)
-```abap
-managed implementation in class zbp_i_vibe_code unique;
-strict ( 2 );
 
 define behavior for ZI_VIBE_CODE alias Code
+implementation in class zbp_i_vibe_code unique
 persistent table zvibe_code
 lock dependent by _CodeGroup
 authorization dependent by _CodeGroup

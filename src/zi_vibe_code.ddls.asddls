@@ -2,7 +2,7 @@
 @EndUserText.label: 'Vibe Code'
 define view entity ZI_VIBE_CODE
   as select from zvibe_code as Code
-  association [1..1] to ZI_VIBE_CODEGROUP as _CodeGroup
+  association to parent ZI_VIBE_CODEGROUP as _CodeGroup
     on $projection.CodeGroupID = _CodeGroup.CodeGroupID
 {
   key Code.code_group_id as CodeGroupID,

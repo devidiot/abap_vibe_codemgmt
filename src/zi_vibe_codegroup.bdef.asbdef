@@ -4,6 +4,7 @@ strict ( 2 );
 define behavior for ZI_VIBE_CODEGROUP alias CodeGroup
 persistent table zvibe_cdgroup
 lock master
+authorization master ( instance )
 {
   create;
   update;

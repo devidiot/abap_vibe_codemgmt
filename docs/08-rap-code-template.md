@@ -64,6 +64,7 @@ strict ( 2 );
 define behavior for ZI_VIBE_CODEGROUP alias CodeGroup
 persistent table zvibe_cdgroup
 lock master
+authorization master ( instance )
 {
   create;
   update;
@@ -98,6 +99,7 @@ strict ( 2 );
 define behavior for ZI_VIBE_CODE alias Code
 persistent table zvibe_code
 lock dependent by _CodeGroup
+authorization dependent by _CodeGroup
 {
   update;
   delete;

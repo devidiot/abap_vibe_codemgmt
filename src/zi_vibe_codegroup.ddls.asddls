@@ -1,7 +1,7 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Vibe Code Group'
 define root view entity ZI_VIBE_CODEGROUP
-  as select from zt_vibe_cdgroup as CodeGroup
+  as select from zvibe_cdgroup as CodeGroup
   composition [0..*] of ZI_VIBE_CODE as _Code
 {
   key CodeGroup.code_group_id as CodeGroupID,

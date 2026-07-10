@@ -8,7 +8,7 @@
 
 ## 2. 테이블 설계안
 ### 2.1 코드 그룹 테이블
-테이블명: ZT_VIBE_CDGROUP
+테이블명: ZVIBE_CDGROUP
 
 필드:
 - mandt: 클라이언트
@@ -22,7 +22,7 @@
 - updated_at: 데이터 엘리먼트 ABP_LASTCHANGE_TSTMPL (UTCLONG 기반)
 
 ### 2.2 코드 테이블
-테이블명: ZT_VIBE_CODE
+테이블명: ZVIBE_CODE
 
 필드:
 - mandt: 클라이언트

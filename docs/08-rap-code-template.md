@@ -7,7 +7,7 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Vibe Code Group'
 define root view entity ZI_VIBE_CODEGROUP
-  as select from zt_vibe_cdgroup as CodeGroup
+  as select from zvibe_cdgroup as CodeGroup
   composition [0..*] of ZI_VIBE_CODE as _Code
 {
   key CodeGroup.code_group_id as CodeGroupID,
@@ -32,7 +32,7 @@ define root view entity ZI_VIBE_CODEGROUP
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Vibe Code'
 define view entity ZI_VIBE_CODE
-  as select from zt_vibe_code as Code
+  as select from zvibe_code as Code
   association [1..1] to ZI_VIBE_CODEGROUP as _CodeGroup
     on $projection.CodeGroupID = _CodeGroup.CodeGroupID
 {
@@ -62,7 +62,7 @@ managed implementation in class zbp_i_vibe_codegroup unique;
 strict ( 2 );
 
 define behavior for ZI_VIBE_CODEGROUP alias CodeGroup
-persistent table zt_vibe_cdgroup
+persistent table zvibe_cdgroup
 lock master
 etc
 {
@@ -77,7 +77,7 @@ etc
 
   association _Code { create; }
 
-  mapping for zt_vibe_cdgroup
+  mapping for zvibe_cdgroup
   {
     CodeGroupID   = code_group_id;
     CodeGroupName = code_group_name;
@@ -97,7 +97,7 @@ managed implementation in class zbp_i_vibe_code unique;
 strict ( 2 );
 
 define behavior for ZI_VIBE_CODE alias Code
-persistent table zt_vibe_code
+persistent table zvibe_code
 lock dependent by _CodeGroup
 etc
 {
@@ -111,7 +111,7 @@ etc
 
   association _CodeGroup;
 
-  mapping for zt_vibe_code
+  mapping for zvibe_code
   {
     CodeGroupID = code_group_id;
     CodeID      = code_id;

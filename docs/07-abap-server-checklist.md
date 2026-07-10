@@ -8,8 +8,8 @@
 
 ## 2. 객체 생성 확인
 다음 객체가 생성되고 활성화되어 있는지 확인한다.
-- 테이블: ZT_VIBE_CDGROUP
-- 테이블: ZT_VIBE_CODE
+- 테이블: ZVIBE_CDGROUP
+- 테이블: ZVIBE_CODE
 - CDS 엔티티: ZI_VIBE_CODEGROUP
 - CDS 엔티티: ZI_VIBE_CODE
 - Behavior Definition: ZI_VIBE_CODEGROUP, ZI_VIBE_CODE
